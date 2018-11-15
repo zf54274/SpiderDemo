@@ -158,11 +158,12 @@ class RandomUserAgentMiddleware(object):
     @classmethod
     def from_crawler(cls, crawler):
         return cls(crawler)
-
+    
     def process_request(self, request, spider):
         def get_ua():
             return getattr(self.ua, self.ua_type)
-
+        
+        # spider是lagou, 则添加cookies
         if spider.name == "lagou":
             request.headers.setdefault('User-Agent', get_ua())
             request.cookies = self.cookies
