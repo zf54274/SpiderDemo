@@ -1,0 +1,61 @@
+{% extends 'df_goods/base.html'%}
+
+{% block js %}
+<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$(".add_goods").click(function(event) {
+			/* Act on the event */
+			url = "/df_cart/add" + this.id +"_1";
+			$.get(url,function(data){
+				$("#show_count").text(data.count);
+			})
+		});
+	})
+</script>
+{% endblock js %}
+
+{% block list %}
+<div class="r_wrap fr clearfix">
+	<div class="sort_bar">
+		<a href="/df_goods/list{{typeid}}_1_1" 
+		{% if sort == '1' %}class="active"{% endif %}
+		>默认</a>
+		<a href="/df_goods/list{{typeid}}_1_2" 
+		{% if sort == '2' %}class="active"{% endif %}
+		>价格</a>
+		<a href="/df_goods/list{{typeid}}_1_3" 
+		{% if sort == '3' %}class="active"{% endif %}
+		>人气</a>
+	</div>
+
+	<ul class="goods_type_list clearfix">
+		{% for g in goodList %}
+		<li>
+			<a href="/df_goods/{{g.id}}"><img src="/static/{{g.gpic}}" ></a>
+			<h4><a href="/df_goods/{{g.id}}">{{g.gtitle}}</a></h4>
+			<div class="operate">
+				<span class="price">{{g.gprice}}</span>
+				<span class="unit">{{g.gunit}}</span>
+				<a href="javascript:;" id="{{g.id}}" class="add_goods" title="加入购物车"></a>
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+
+	<div class="pagenation">
+		{% if pageid > 1 %}
+		<a href="/df_goods/list{{typeid}}_{{pageid|add:-1}}_{{sort}}">上一页</a>
+		{% endif %}
+		{% for p in page_num %}
+			<a href="/df_goods/list{{typeid}}_{{p}}_{{sort}}" 
+			{% if p == pageid %}class="active"{% endif %}
+			>{{p}}</a>
+		{% endfor %}
+		{% if pageid < page_num|length %}
+		<a href="/df_goods/list{{typeid}}_{{pageid|add:1}}_{{sort}}">下一页></a>
+		{% endif %}
+	</div>
+</div>
+{% endblock list %}
+
